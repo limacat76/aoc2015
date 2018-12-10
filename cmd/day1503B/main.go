@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	filename := os.Getenv("HOME") + "/2015/02/data.txt"
+	filename := os.Getenv("HOME") + "/2015/03/data.txt"
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Println(err)
@@ -16,5 +16,5 @@ func main() {
 	}
 	defer file.Close()
 
-	fmt.Println(code.NeededPaper(file))
+	fmt.Println(code.ReadMap2(file))
 }
