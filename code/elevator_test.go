@@ -21,7 +21,7 @@ func TestElevatorDestination(t *testing.T) {
 	for _, c := range cases {
 		got := CalculateDestination(&c.instructions)
 		if got != c.destination {
-			t.Errorf("Dconf CalculateDestination (X) == %v, want %v", got, c.destination)
+			t.Errorf("CalculateDestination (X) == %v, want %v", got, c.destination)
 		}
 	}
 }
@@ -38,7 +38,7 @@ func TestElevatorBasement(t *testing.T) {
 	for _, c := range cases {
 		got := CalculateBasement(&c.instructions)
 		if got != c.destination {
-			t.Errorf("Dconf CalculateBasement (X) == %v, want %v", got, c.destination)
+			t.Errorf("CalculateBasement (X) == %v, want %v", got, c.destination)
 		}
 	}
 }
