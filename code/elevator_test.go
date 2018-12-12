@@ -1,6 +1,9 @@
 package code
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestElevatorDestination(t *testing.T) {
 	cases := []struct {
@@ -19,7 +22,7 @@ func TestElevatorDestination(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		got := CalculateDestination(&c.instructions)
+		got := CalculateDestination(strings.NewReader(c.instructions))
 		if got != c.destination {
 			t.Errorf("CalculateDestination (X) == %v, want %v", got, c.destination)
 		}
@@ -36,7 +39,7 @@ func TestElevatorBasement(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		got := CalculateBasement(&c.instructions)
+		got := CalculateBasement(strings.NewReader(c.instructions))
 		if got != c.destination {
 			t.Errorf("CalculateBasement (X) == %v, want %v", got, c.destination)
 		}

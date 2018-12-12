@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/limacat76/aoc2015/code"
@@ -10,8 +9,12 @@ import (
 
 func main() {
 	filename := os.Getenv("HOME") + "/2015/01/data.txt"
-	data, _ := ioutil.ReadFile(filename)
-	s := string(data)
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
 
-	fmt.Println(code.CalculateBasement(&s))
+	fmt.Println(code.CalculateBasement(file))
 }

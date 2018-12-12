@@ -1,10 +1,10 @@
 package code
 
 import (
-	"bufio"
 	"fmt"
 	"io"
-	"log"
+
+	"github.com/limacat76/aoc2015/library"
 )
 
 type point struct {
@@ -28,56 +28,58 @@ func moveAndCalculate(who *point, c rune, where map[string]bool) {
 	where[toString(who)] = true
 }
 
+type company struct {
+	santasPosition point
+	roboPosition   point
+	covered        map[string]bool
+	santaMoves     bool
+}
+
+func lastChristmas(c rune, context interface{}) library.LoopRule {
+	original, ok := context.(*company)
+	if ok {
+		moveAndCalculate(&original.santasPosition, c, original.covered)
+	}
+	return library.Continue
+}
+
+func thisChristmas(c rune, context interface{}) library.LoopRule {
+	original, ok := context.(*company)
+	if ok {
+		if original.santaMoves {
+			moveAndCalculate(&original.santasPosition, c, original.covered)
+		} else {
+			moveAndCalculate(&original.roboPosition, c, original.covered)
+		}
+		original.santaMoves = !original.santaMoves
+	}
+	return library.Continue
+}
+
 // ReadMap reads the map to Santa and finds to how many houses he brought gifts
 func ReadMap(instructions io.Reader) int {
-	covered := make(map[string]bool)
-
-	// starting home
-	santasPosition := &point{0, 0}
-	covered[toString(santasPosition)] = true
-	r := bufio.NewReader(instructions)
-	for {
-		if c, _, err := r.ReadRune(); err != nil {
-			if err == io.EOF {
-				break
-			} else {
-				log.Fatal(err)
-			}
-		} else {
-			moveAndCalculate(santasPosition, c, covered)
-		}
+	myCompany := &company{
+		santasPosition: point{0, 0},
+		covered:        make(map[string]bool),
 	}
+	myCompany.covered[toString(&myCompany.santasPosition)] = true
 
-	return len(covered)
+	library.ReadRunes(instructions, myCompany, lastChristmas)
+
+	return len(myCompany.covered)
 }
 
 // ReadMap2 reads the map to Santa and RoboSanta and finds to how many houses they brought gifts
 func ReadMap2(instructions io.Reader) int {
-	covered := make(map[string]bool)
-
-	// starting home
-	santasPosition := &point{0, 0}
-	roboPosition := &point{0, 0}
-	covered[toString(santasPosition)] = true
-	santaMoves := true
-
-	r := bufio.NewReader(instructions)
-	for {
-		if c, _, err := r.ReadRune(); err != nil {
-			if err == io.EOF {
-				break
-			} else {
-				log.Fatal(err)
-			}
-		} else {
-			if santaMoves {
-				moveAndCalculate(santasPosition, c, covered)
-			} else {
-				moveAndCalculate(roboPosition, c, covered)
-			}
-			santaMoves = !santaMoves
-		}
+	myCompany := &company{
+		santasPosition: point{0, 0},
+		roboPosition:   point{0, 0},
+		covered:        make(map[string]bool),
+		santaMoves:     true,
 	}
+	myCompany.covered[toString(&myCompany.santasPosition)] = true
 
-	return len(covered)
+	library.ReadRunes(instructions, myCompany, thisChristmas)
+
+	return len(myCompany.covered)
 }
