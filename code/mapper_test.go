@@ -40,24 +40,3 @@ func TestReadMap2(t *testing.T) {
 		}
 	}
 }
-
-func TestPrint(t *testing.T) {
-
-	cases := []struct {
-		position *point
-		wish     string
-	}{
-		{&point{0, 0}, "0:0"},
-		{&point{2, 3}, "2:3"},
-		{&point{-1, -9}, "-1:-9"},
-		{&point{0, 3}, "0:3"},
-	}
-
-	for _, c := range cases {
-		got := toString(c.position)
-		if got != c.wish {
-			t.Errorf("ReadMap (X) == %v, want %v", got, c.wish)
-		}
-	}
-
-}
