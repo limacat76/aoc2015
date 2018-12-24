@@ -16,5 +16,6 @@ func main() {
 	}
 	defer file.Close()
 
-	fmt.Println(code.SantasLightInstructions(file))
+	circuit := code.MakeDirectory(file)
+	fmt.Println(circuit.Dir["a"].Output(circuit))
 }

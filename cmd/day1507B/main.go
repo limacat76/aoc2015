@@ -15,6 +15,8 @@ func main() {
 		return
 	}
 	defer file.Close()
-
-	fmt.Println(code.SantasLightInstructions(file))
+	circuit := code.MakeDirectory(file)
+	signal := circuit.Dir["a"].Output(circuit)
+	circuit.SetSignal("b", signal)
+	fmt.Println(circuit.Dir["a"].Output(circuit))
 }
