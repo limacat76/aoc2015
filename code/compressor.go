@@ -2,7 +2,6 @@ package code
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"strings"
 
@@ -29,7 +28,6 @@ func calculateString(c rune, context interface{}) library.LoopRule {
 			// la sequenza di escape vale almeno un carattere
 			original.memory++
 			original.skip++
-			fmt.Println(string(c))
 		} else {
 			if original.skip > 0 {
 				if original.skip == 1 && 'x' == c {
@@ -67,29 +65,6 @@ func calculateLiteral(c rune, context interface{}) library.LoopRule {
 		} else {
 			original.result = original.result + string(c)
 		}
-		/*
-			// code is always updated
-			original.code++
-			if '"' == c && original.skip == 0 {
-				original.difference++
-			} else if '\\' == c && original.skip == 0 {
-				// la sequenza di escape vale almeno un carattere
-				original.memory++
-				original.skip++
-				fmt.Println(string(c))
-			} else {
-				if original.skip > 0 {
-					if original.skip == 1 && 'x' == c {
-						original.skip = 2
-					} else {
-						original.skip--
-					}
-					original.difference++
-				} else {
-					original.memory++
-				}
-			}
-		*/
 	}
 	return library.Continue
 }
@@ -99,12 +74,6 @@ func CompilerLiteral(aString string) string {
 	library.ReadRunes(strings.NewReader(aString), cfT, calculateLiteral)
 	return cfT.result + `"`
 }
-
-/*
-s := "hello";
-c := 'x';
-fmt.Println(s + string(c));
-*/
 
 func RamCalcStream(instructions io.Reader) (int, int, int) {
 	tA := 0

@@ -104,7 +104,7 @@ func TestCircuitRules(t *testing.T) {
 		circuit := MakeDirectory(strings.NewReader(c.rule))
 		got := circuit.Dir[c.key].Output(circuit)
 		if got != c.expected {
-			t.Errorf("x.Dir[%x].output(x) == %v, want %v", c.key, got, c.expected)
+			t.Errorf("x.Dir[%v].output(x) == %v, want %v", c.key, got, c.expected)
 		}
 	}
 }

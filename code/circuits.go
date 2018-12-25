@@ -25,7 +25,6 @@ func (r Circuit) SetSignal(gate string, signal uint16) {
 
 func (r Circuit) fetch(name string) Gate {
 	res := r.Dir[name]
-	// r.Dir[name] = nil
 	return res
 }
 
@@ -51,10 +50,8 @@ func fetchAndExecute(r registry, gateSpec string) uint16 {
 	s2, err := strconv.Atoi(gateSpec)
 	if err != nil {
 		if val, ok := ccache[gateSpec]; ok {
-			fmt.Printf("%v,", gateSpec)
 			return val
 		}
-		// fmt.Printf("%v,", gateSpec)
 		result := r.fetch(gateSpec).Output(r)
 		ccache[gateSpec] = result
 		return result
@@ -140,20 +137,16 @@ func MakeGate(row string) (Gate, string) {
 		second := gateRule[2]
 		switch gateRule[1] {
 		case "AND":
-			fmt.Printf("and mk %v %v\n", first, second)
 			result = and{first, second}
 			break
 		case "OR":
-			fmt.Printf("OR mk %v %v\n", first, second)
 			result = or{first, second}
 			break
 		case "LSHIFT":
-			fmt.Printf("LSHIFT mk %v %v\n", first, second)
 			s2, _ := strconv.Atoi(second)
 			result = lshift{first, uint(s2)}
 			break
 		case "RSHIFT":
-			fmt.Printf("RSHIFT mk %v %v\n", first, second)
 			s2, _ := strconv.Atoi(second)
 			result = rshift{first, uint(s2)}
 			break
@@ -162,18 +155,18 @@ func MakeGate(row string) (Gate, string) {
 	return result, outputWire
 }
 
-// MakeDirectory creates a circuit directory from the instruction booklet
+// MakeDirectory creates a circuit directory from the instruction booklet, and resets the circuit cache
 func MakeDirectory(instructions io.Reader) Circuit {
 	x := Circuit{
 		Dir: make(map[string]Gate),
 	}
+	ccache = make(map[string]uint16)
 
 	scanner := bufio.NewScanner(instructions)
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
 		row := scanner.Text()
 		gate, s := MakeGate(row)
-		fmt.Printf("%v, %v\n", s, gate)
 		x.Dir[s] = gate
 	}
 
